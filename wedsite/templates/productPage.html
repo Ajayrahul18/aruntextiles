@@ -1,0 +1,199 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+
+
+
+
+
+
+
+
+
+<section class="content-main">
+    <div class="card">
+        <div class="card-body">
+            <div class="row gx-5">
+                <aside class="col-lg-2 border-end">
+                    <nav class="nav nav-pills flex-lg-column mb-4">
+                        <li class="nav-item" role="presentation" >
+                            <button class="nav-link" data-filter="all" style="text-align: left;">All</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-filter="men" style="text-align: left;">Men's Wear</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-filter="women" style="text-align: left;">Women's Wear</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-filter="boys" style="text-align: left;">Boy's Wear</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-filter="girls" style="text-align: left;">Girl's Wear</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-filter="kids" style="text-align: left;">Kid's Wear</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-filter="newBorn" style="text-align: left;">New Born</button>
+                        </li>
+                    </nav>
+                </aside>
+                <div class="col-lg-9">
+                        <div class="row" id="product-container">
+                            {% for item in items %}
+                            <div class="col-md-3 product-item" data-category="{{ item.product_tag }}">
+                                <div class="product-cart-wrap hover-up" style="margin-left: 25px;">
+                                    <div class="product-img-action-wrap index-img">
+                                        <div class="xzoom-container">
+                                            <a href="#">
+                                                <img class="xzoom" src="{{ item.product_picture }}" xoriginal="{{ item.product_picture }}" alt="">
+                                            </a>
+                                        </div>
+
+
+
+                                        <div class="product-action-1">
+                                            <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal{{ item.id }}"><i class="fi-rs-eye"></i></a>
+                                        </div>
+
+
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">Hot</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-content-wrap">
+                                        <div class="product-category">
+                                            <a href="shop-grid-right.html">{{ item.product_tag }}</a>
+                                        </div>
+                                        <h2><a href="#">{{ item.product_name }}</a></h2>
+                                        <div class="rating-result" title="90%">
+                                            <span></span>
+                                        </div>
+                                        <div class="product-price">
+                                            <span>₹ {{ item.current_price }}</span>
+                                            <a href="#" style="color: black;">(Start's From)</a>
+                                        </div>
+                                        <div class="product-action-1 show">
+                                            <a aria-label="For Enquiry" class="action-btn hover-up"
+                                                href="https://api.whatsapp.com/send?phone=1234567890">
+                                                <i class="fab fa-whatsapp fa-lg" style="font-size:24px;"></i>
+                                            </a>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade custom-modal" id="quickViewModal{{ item.id }}" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">              
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>       
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="detail-gallery">
+                                                        <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                                                        <!-- MAIN SLIDES -->
+                                                        <div class="product-image-slider">
+                                                            <figure class="border-radius-10">
+                                                                <img src="{{ item.product_picture_zoom }}" alt="product image">
+                                                            </figure>
+                                                        </div>
+                                                        <!-- THUMBNAILS -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                                    <div class="detail-info">
+                                                        <h3 class="title-detail mt-30">{{ item.product_name }}</h3>
+                                                        <div class="clearfix product-price-cover">
+                                                            <div class="product-price primary-color float-left">
+                                                                <ins><span class="text-brand">₹ {{ item.current_price }}</span></ins>
+                                                                <ins><span class="old-price font-md ml-15" style="color: #2f515a;">₹ {{ item.previous_price }}</span></ins>
+                                                                <span class="save-price  font-md color3 ml-15" style="color: red;">Upto 75% Off</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                                        <div class="short-desc mb-30">
+                                                            <p class="font-sm">Child-friendly fabric is vital when producing children’s and baby clothing. There isn’t a magic formula for this niche.</p>
+                                                        </div>
+                                                        
+                                                        
+                                                        <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                                        <ul class="product-meta font-xs color-grey mt-50">
+                                                            <li class="mb-5">Tags: <a href="#" rel="tag" style="color: #3ed092;">Cloth</a>, <a href="#" rel="tag" style="color: #3ed092;">{{ item.product_tag }}</a>, <a href="#" rel="tag" style="color: #3ed092;">Dress</a> </li>
+                                                            <li>Availability:<span class="in-stock text-success ml-5">Surpluse Stock</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- Detail Info -->
+                                                </div>
+                                            </div>
+                                        </div>        
+                                </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <hr class="my-5">
+             
+                </div> <!-- col.// -->
+            </div> <!-- row.// -->
+        </div> <!-- card body end// -->
+    </div> 
+</section> 
+
+
+<style>
+.nav-pills .nav-link {
+    font-size: 20px;
+    width: 100%; 
+
+}
+
+
+    
+    .nav-pills .nav-link:hover {
+        background-color: #2f515a; /* Change background color on hover */
+    }
+    
+</style>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var filterButtons = document.querySelectorAll('.nav-link');
+        var productItems = document.querySelectorAll('.product-item');
+
+        filterButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var filterValue = button.getAttribute('data-filter');
+                filterProducts(filterValue);
+            });
+        });
+
+        function filterProducts(category) {
+            productItems.forEach(function (item) {
+                var itemCategory = item.getAttribute('data-category');
+
+                if (category === 'all' || category === itemCategory) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    });
+
+
+</script>
+<script src="../static/js/vendor/jquery-3.6.0.min.js"></script>
+<script src="../static/js/vendor/bootstrap.bundle.min.js"></script>
+<script src="../static/js/plugins/select2.min.js"></script>
+<script src="../static/js/plugins/perfect-scrollbar.js"></script>
+
+<!-- Main Script -->
+<script src="static/js/main.js" type="text/javascript"></script>
+
+
+{% endblock %}
