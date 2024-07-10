@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, redirect, request, url_for
-from .models import User
+from .models import Admin
 from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__, url_prefix='/aruntextiles')
@@ -11,7 +11,7 @@ def userLogin():
         username = request.form['username']
         password = request.form['password']
 
-        user = User.query.filter_by(username=username).first()
+        user = Admin.query.filter_by(username=username).first()
         
 
         if user and user.check_password(password):
