@@ -42,12 +42,3 @@ def contact():
 def adminLoginPage():
     return render_template("adminLoginPage.html")
 
-# @views.route("/cart", endpoint='cart')
-# @login_required
-# def showCart():
-#     cart_items = Cart.query.filter_by(customer_link=current_user.id).all()
-#     total_amount = sum(item.productpage.current_price * item.quantity for item in cart_items)
-#     csrf_form = CSRFProtectionForm()  # Create an instance of the CSRF form
-#     return render_template("cart.html", cart_items=cart_items, total_amount=total_amount, form=csrf_form)
-
-

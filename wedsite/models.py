@@ -51,7 +51,7 @@ class User(db.Model, UserMixin):
     
 
     def __repr__(self):
-        return '<User %r>' % self.id
+        return f'<User  {self.id}>' 
 
 
 
@@ -66,7 +66,7 @@ class Product(db.Model):
 
 
     def __str__(self):
-        return '<Product %r>' % self.product_name
+        return f'<Product {self.product_name}>' 
     
 
 class BestSeller(db.Model):
@@ -128,7 +128,7 @@ class Cart(db.Model):
     product_link = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
 
     def __str__(self):
-        return '<Cart %r>' % self.id
+        return f'<Cart {self.id}>' 
 
 
 class Order(db.Model):

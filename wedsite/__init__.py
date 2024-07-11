@@ -25,7 +25,7 @@ def create_app():
     from .views import views
     from .auth import auth
     from .admin import admin
-    from .models import Product, BestSeller, BestOffers, Instagram, ProductPage, Admin
+    from .models import Product, BestSeller, BestOffers, Instagram, ProductPage, Admin, User
 
 
     app.register_blueprint(views, url_prefix='/')
@@ -41,7 +41,7 @@ def create_app():
 
         @login_manager.user_loader
         def load_user(id):
-            return Admin.query.get(int(id)) 
+            return User.query.get(int(id)) 
         
         ## Update User in the model
 

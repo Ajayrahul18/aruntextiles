@@ -107,9 +107,9 @@ def adminLogin():
             login_user(user)
             return redirect(url_for('auth.dashboard'))
         else:
-            return render_template('admin.html', error='Invalid credentials')
+            return render_template('login.html')
 
-    return render_template("admin.html")
+    return render_template("login.html")
 
 
 @auth.route("/logout")
