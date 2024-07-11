@@ -34,7 +34,6 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.Integer, nullable=True)
     address = db.Column(db.String(100), nullable=True)
     password_hash = db.Column(db.String(128), nullable=False)
-    data_joined = db.Column(db.DateTime, nullable=False)
 
     cart_items = db.relationship('Cart', backref='user', lazy=True)
     orders = db.relationship('Order', backref='user', lazy=True)

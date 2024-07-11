@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, request, jsonify
-from .models import Product,BestOffers,Instagram, BestSeller, ProductPage
+from .models import Product,BestOffers,Instagram, BestSeller, ProductPage, Cart
+from flask_login import login_required, current_user
 from . import db
 
 views = Blueprint('views', __name__)
@@ -37,5 +38,16 @@ def productPageList():
 def contact():
     return render_template("contact.html")
 
+@views.route("/adminLoginPage")
+def adminLoginPage():
+    return render_template("adminLoginPage.html")
+
+# @views.route("/cart", endpoint='cart')
+# @login_required
+# def showCart():
+#     cart_items = Cart.query.filter_by(customer_link=current_user.id).all()
+#     total_amount = sum(item.productpage.current_price * item.quantity for item in cart_items)
+#     csrf_form = CSRFProtectionForm()  # Create an instance of the CSRF form
+#     return render_template("cart.html", cart_items=cart_items, total_amount=total_amount, form=csrf_form)
 
 

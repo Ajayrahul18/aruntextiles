@@ -1,14 +1,35 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, FloatField, PasswordField, EmailField, BooleanField, SubmitField, SelectField
-from wtforms.validators import DataRequired, length, NumberRange
+from wtforms.validators import DataRequired, length, NumberRange, Email
 from flask_wtf.file import FileField, FileRequired
 
 
-class LoginForm(FlaskForm):
+class UserProfileUpdateForm(FlaskForm):
+    firstname = StringField('First Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    phone = IntegerField('Phone', validators=[DataRequired()])
+    address = StringField('Address', validators=[DataRequired()])
+    submit = SubmitField('Update')
+
+
+class UserSigupForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    user_name = StringField('User Name', validators=[DataRequired()])
+    password_1 = PasswordField('Enter Your Password', validators=[DataRequired(), length(min=6)])
+    password_2 = PasswordField('Confirm Your Password', validators=[DataRequired(), length(min=6)])
+    submit = SubmitField('Submit & Register')
+    
+class AdminLoginForm(FlaskForm):
     username = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Enter Your Password', validators=[DataRequired(), length(min=6)])
     submit = SubmitField('Sign Up')
+
+class UserLoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('Enter Your Password', validators=[DataRequired(), length(min=6)])
+    submit = SubmitField('Sign Up')
+
 
 class ShopItemsForm(FlaskForm):
     choices = [('all', 'All Products'),('newBorn', 'New Born'), ('kids', 'Kids'), ('boys', 'Boys'), ('girls', 'Girls'), ('men', 'Men'), ('women', 'Woman')]

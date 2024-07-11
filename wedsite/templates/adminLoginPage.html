@@ -1,7 +1,17 @@
 {% extends 'index.html' %}
 
 {% block content %}
+
 <main class="main">
+  <div class="page-header breadcrumb-wrap">
+      <div class="container">
+          <div class="breadcrumb">
+              <a href="index.html" rel="nofollow">Home</a>
+              <span></span> Pages
+              <span></span> Login / Register
+          </div>
+      </div>
+  </div>
   <section class="pt-150 pb-150">
       <div class="container">
           <div class="row justify-content-center">
@@ -11,26 +21,12 @@
                           <div class="heading_s1">
                               <h3 class="mb-30">Login</h3>
                           </div>
-
-                          {% with messages = get_flashed_messages(with_categories=true) %}
-                            {% if messages %}
-                              <div class="alert alert-warning">
-                                {% for category, message in messages %}
-                                  <p>{{ message }}</p>
-                                {% endfor %}
-                              </div>
-                            {% endif %}
-                          {% endwith %}
-
-                          <form method="POST" action="{{ url_for('auth.userLogin') }}">
-                            {{ form.hidden_tag() }}
+                          <form action="{{ url_for('auth.adminLogin') }}" method="POST">
                               <div class="form-group">
-                                  {{ form.email.label }}
-                                  {{ form.email(class_='form-control', placeholder='User Name') }}
+                                  <input type="text" required="" name="username" placeholder="User Name">
                               </div>
                               <div class="form-group">
-                                  {{ form.password.label }}
-                                  {{ form.password(class_='form-control', placeholder='Password') }}
+                                  <input required="" type="password" name="password" placeholder="Password">
                               </div>
                               <div class="login_footer form-group">
                                   <div class="chek-form">
@@ -42,10 +38,8 @@
                                   <a class="text-muted" href="#">Forgot password?</a>
                               </div>
                               <div class="form-group">
-                                  {{ form.submit(class_='btn btn-fill-out btn-block hover-up') }}
+                                  <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Log in</button>
                               </div>
-                              <div class="text-muted text-center">Create a new account? <a href="{{ url_for('auth.userSignUp') }}">Sign up now</a></div>
-                              <div class="text-muted text-center">Admin <a href="{{ url_for('views.adminLoginPage') }}">Login</a></div>
                           </form>
                       </div>
                   </div>
@@ -54,4 +48,5 @@
       </div>
   </section>
 </main>
+  
 {% endblock %}
