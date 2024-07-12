@@ -9,13 +9,37 @@ from .import db
 auth = Blueprint('auth', __name__, url_prefix='/aruntextiles')
 
 
+@auth.route('/update_cart_quantity')
+@login_required
+def update_cart_quantity():
+    cart_item_id = request.form['id']
+    action = request.form['action']
+    
+    # Logic to update quantity based on action
+    cart_item = Cart.query.get(cart_item_id)
+    if action == 'increase':
+        cart_item.quantity += 1
+    elif action == 'decrease' and cart_item.quantity > 1:
+        cart_item.quantity -= 1
+
+    # Calculate new total for this cart item
+    total_price = cart_item.product.current_price * cart_item.quantity
+    
+    db.session.commit()  # Save changes
+
+    return jsonify({
+        'updated_quantity': cart_item.quantity,
+        'updated_total': total_price
+    })
+
+
 @auth.route('/remove_from_cart/<int:cart_item_id>', methods=['POST'])
 @login_required
 def remove_from_cart(cart_item_id):
     cart_item = Cart.query.get(cart_item_id)
     db.session.delete(cart_item)
     db.session.commit()
-    return redirect(url_for('auth.cart', form=form))
+    return redirect(url_for('auth.cart'))
 
 
 
