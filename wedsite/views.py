@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, request, jsonify
 from .models import Product,BestOffers,Instagram, BestSeller, ProductPage, Cart
 from flask_login import login_required, current_user
+from .forms import AdminLoginForm
 from . import db
 
 views = Blueprint('views', __name__)
@@ -40,5 +41,6 @@ def contact():
 
 @views.route("/adminLoginPage")
 def adminLoginPage():
-    return render_template("adminLoginPage.html")
+    form = AdminLoginForm()
+    return render_template("adminLoginPage.html", form=form)
 

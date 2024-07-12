@@ -1,11 +1,58 @@
-from flask import Blueprint, render_template, session, redirect, request, url_for, flash
-from .models import Admin, User
+from flask import Blueprint, render_template, session, redirect, request, url_for, flash, jsonify
+from .models import Admin, User, ProductPage, Cart
 from flask_login import login_user, login_required, logout_user, current_user
-from .forms import UserSigupForm, UserLoginForm, UserProfileUpdateForm
+from .forms import UserSigupForm, UserLoginForm, UserProfileUpdateForm, AdminLoginForm, DummyForm
+
 from werkzeug.security import generate_password_hash
 from .import db
 
 auth = Blueprint('auth', __name__, url_prefix='/aruntextiles')
+
+
+@auth.route('/remove_from_cart/<int:cart_item_id>', methods=['POST'])
+@login_required
+def remove_from_cart(cart_item_id):
+    cart_item = Cart.query.get(cart_item_id)
+    db.session.delete(cart_item)
+    db.session.commit()
+    return redirect(url_for('auth.cart', form=form))
+
+
+
+@auth.route('/add_to_cart/<int:product_id>', methods=['POST'])
+@login_required
+def add_to_cart(product_id):
+    product = ProductPage.query.get_or_404(product_id)
+    cart_item = Cart.query.filter_by(user_link=current_user.id, product_link=product_id).first()
+    
+    if cart_item:
+        cart_item.quantity += 1
+    else:
+        new_cart_item = Cart(user_link=current_user.id, product_link=product_id, quantity=1)
+        db.session.add(new_cart_item)
+    
+    db.session.commit()
+    flash('Product added to cart successfully!', 'success')
+    return redirect(url_for('auth.cart'))
+
+@auth.route('/cart')
+@login_required
+def cart():
+    cart_items = Cart.query.filter_by(user_link=current_user.id).all()
+    
+    cart_details = []  # To hold cart items with product details
+    total_amount = 0
+    
+    for item in cart_items:
+        product = ProductPage.query.get(item.product_link)  # Fetch the ProductPage object
+        if product:  # Check if product exists
+            cart_details.append({
+                'cart_item': item,
+                'product': product
+            })
+            total_amount += product.current_price * item.quantity
+    
+    return render_template('cart.html', cart_details=cart_details, total_amount=total_amount)
 
 
 @auth.route("/userSignUp", methods=["GET", "POST"])
@@ -89,34 +136,36 @@ def UserProfileUpdate():
         form.email.data = current_user.email
         form.phone.data = current_user.phone
         form.address.data = current_user.address
-        form.birthday.data = current_user.birthday
 
     return render_template('customer_profile_update.html', form=form)
 
 
 @auth.route("/adminLogin", methods=["GET", "POST"])
 def adminLogin():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = AdminLoginForm()
+    print("Form created:", form)
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
 
         user = Admin.query.filter_by(username=username).first()
-        
 
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('auth.dashboard'))
         else:
-            return render_template('login.html')
+            # Optionally handle failed login
+            flash("Invalid username or password", "danger")
 
-    return render_template("login.html")
+    return render_template("adminLoginPage.html", form=form)
+
 
 
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('auth.adminLogin'))
+    return render_template("index.html")
 
 @auth.route("/dashboard")
 @login_required

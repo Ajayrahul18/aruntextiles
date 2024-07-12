@@ -4,6 +4,8 @@ from wtforms import StringField, IntegerField, FloatField, PasswordField, EmailF
 from wtforms.validators import DataRequired, length, NumberRange, Email
 from flask_wtf.file import FileField, FileRequired
 
+class DummyForm(FlaskForm):
+    pass
 
 class UserProfileUpdateForm(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired()])

@@ -56,7 +56,9 @@
 
                                         <div class="product-action-1">
                                             <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal{{ item.id }}"><i class="fi-rs-eye"></i></a>
-                                            <a aria-label="Add To Wishlist" class="action-btn hover-up" href="#"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn hover-up add-to-wishlist-btn" href="#" data-product-id="{{ item.id }}">
+                                                <i class="fi-rs-heart"></i>
+                                            </a>
                                         </div>
                                         
 
@@ -159,6 +161,42 @@
     }
     
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var addToWishlistButtons = document.querySelectorAll('.add-to-wishlist-btn');
+    
+    addToWishlistButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            var productId = button.getAttribute('data-product-id');
+
+            fetch(`/add_to_cart/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token() }}'  // Ensure CSRF protection is handled
+                },
+                body: JSON.stringify({
+                    product_id: productId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                } else {
+                    alert('Failed to add product to cart: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+});
+
+</script>
 
 
 

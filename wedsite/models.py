@@ -117,7 +117,7 @@ class ProductPage(db.Model):
 
 
     def __str__(self):
-        return '<Product %r>' % self.product_name
+        return f'<Product {self.product_id}>' 
     
 
 class Cart(db.Model):
@@ -142,4 +142,4 @@ class Order(db.Model):
     product_link = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
 
     def __str__(self):
-        return '<Order %r>' % self.id
+        return f'<Order {self.id}>' 

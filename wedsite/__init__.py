@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager,login_user
+from flask_wtf.csrf import CSRFProtect
 
 db = SQLAlchemy()
 DB_NAME = 'database.sqlite3'
@@ -20,6 +21,8 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'xxxxyyyyyzzzzz'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+
+    csrf = CSRFProtect(app)
     db.init_app(app)
 
     from .views import views
@@ -55,5 +58,7 @@ def create_app():
 
     return app
 
-
+if __name__ == "__main__":
+    app = create_app()
+    app.run(debug=True)
 
