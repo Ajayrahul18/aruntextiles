@@ -309,27 +309,6 @@
   <!--   Core JS Files   -->
 
   <script>
-    $(document).on('click', '.increase-quantity, .decrease-quantity', function() {
-    var cartItemId = $(this).data('id');
-    var action = $(this).hasClass('increase-quantity') ? 'increase' : 'decrease';
-    
-    $.ajax({
-        url: "{{ url_for('auth.update_cart_quantity') }}",
-        method: 'POST',
-        data: {
-            id: cartItemId,
-            action: action
-        },
-        success: function(response) {
-            console.log('Update successful:', response);
-            $('.quantity').text(response.updated_quantity);
-        },
-        error: function(xhr, status, error) {
-            console.error('Error updating quantity:', error);
-            alert('Error updating quantity');
-        }
-    });
-});
 
     var ctx1 = document.getElementById("chart-line").getContext("2d");
 

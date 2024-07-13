@@ -9,29 +9,6 @@ from .import db
 auth = Blueprint('auth', __name__, url_prefix='/aruntextiles')
 
 
-@auth.route('/update_cart_quantity')
-@login_required
-def update_cart_quantity():
-    cart_item_id = request.form['id']
-    action = request.form['action']
-    
-    # Logic to update quantity based on action
-    cart_item = Cart.query.get(cart_item_id)
-    if action == 'increase':
-        cart_item.quantity += 1
-    elif action == 'decrease' and cart_item.quantity > 1:
-        cart_item.quantity -= 1
-
-    # Calculate new total for this cart item
-    total_price = cart_item.product.current_price * cart_item.quantity
-    
-    db.session.commit()  # Save changes
-
-    return jsonify({
-        'updated_quantity': cart_item.quantity,
-        'updated_total': total_price
-    })
-
 
 @auth.route('/remove_from_cart/<int:cart_item_id>', methods=['POST'])
 @login_required
@@ -42,22 +19,30 @@ def remove_from_cart(cart_item_id):
     return redirect(url_for('auth.cart'))
 
 
+@auth.route('/check_login_status', methods=['GET'])
+def check_login_status():
+    is_logged_in = current_user.is_authenticated
+    return jsonify({'is_logged_in': is_logged_in})
+
 
 @auth.route('/add_to_cart/<int:product_id>', methods=['POST'])
 @login_required
 def add_to_cart(product_id):
+    data = request.get_json()
+    quantity = data.get('quantity', 1)
     product = ProductPage.query.get_or_404(product_id)
     cart_item = Cart.query.filter_by(user_link=current_user.id, product_link=product_id).first()
     
     if cart_item:
-        cart_item.quantity += 1
+        cart_item.quantity += quantity
+        current_quantity = cart_item.quantity
     else:
-        new_cart_item = Cart(user_link=current_user.id, product_link=product_id, quantity=1)
+        new_cart_item = Cart(user_link=current_user.id, product_link=product_id, quantity=quantity)
         db.session.add(new_cart_item)
+        current_quantity = new_cart_item.quantity
     
     db.session.commit()
-    flash('Product added to cart successfully!', 'success')
-    return redirect(url_for('auth.cart'))
+    return jsonify({'status': 'success', 'message': 'Product added to cart successfully!', 'quantity': current_quantity})
 
 @auth.route('/cart')
 @login_required
